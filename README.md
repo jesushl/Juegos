@@ -38,3 +38,15 @@ That is why the goal solutions are stored.
 
 Probably I'm creating more doubts than solutions for you but if you have no idea
 is actually good cause now you have a path to research.
+
+## Lotery
+Lotery is a game that give you numbers for lottery  :neutral_face:
+Ok is not so fun, but In my defense I was trying to create an Alexa skill,
+and in that moment I thought she.. or it, only read strigs and not numbers cause
+In Mexico does not exist that skill, you know, you thing that if you are the first
+is because some one else try it and couldn´t.
+
+Then I create a code that use regular expressions to translade numbers to
+strings in Spanish ...
+
+ :sweat_smile: I hope you not see it boring now. 
