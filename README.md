@@ -1,5 +1,5 @@
-###Juegos
-##Objective
+### Juegos
+## Objective
 This     repository is to solve those frustrating test from huge companies.
 
 This are some exercises I tried to solve in a very important code interview
@@ -12,7 +12,7 @@ every one of this games.:neckbeard:
 
 P.S. I hate not handle time in code Interview.:confused:
 
-#Maze :mouse2:
+# Maze :mouse2:
 The idea of this game is buid a maze in a matrix n X m, here exist a goal to
 touch inside the maze :icecream: in my case I chose my 'J' character by obvious
 reasons :sun_with_face:.
