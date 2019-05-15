@@ -12,7 +12,7 @@ every one of this games.:neckbeard:
 
 P.S. I hate not handle time in code Interview.:confused:
 
-### Maze :mouse2:
+## Maze :mouse2:
 The idea of this game is buid a maze in a matrix n X m, here exist a goal to
 touch inside the maze :icecream: in my case I chose my 'J' character by obvious
 reasons :sun_with_face:.
@@ -23,3 +23,18 @@ also  a valid hall is a '0' and walls are '1', any other character is like a
 wall.
 
 :mouse: Ready for a simple explanation?
+
+### Recursivity
+Recursivity is an awesome property in programing languages,
+the main idea is use the same method again and again cause ....
+it call itself .
+:rice_scene::shipit:
+
+In this case is a little bit different, I use an object that create another
+object like itself only with one difference, move one box in the matrix.
+
+This solution evolve an understanding of variables by value and reference.
+That is why the goal solutions are stored.
+
+Probably I'm creating more doubts than solutions for you but if you have no idea
+is actually good cause now you have a path to research.
