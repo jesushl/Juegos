@@ -64,7 +64,7 @@ if __name__ == "__main__":
     argparseConf.update({'epilog':'This program generates a pascal trinagles in O(nLogn) time '})
     argparseConf.update({'add_help':'This program needs pprint "pip3 install pprint"'})
     parser = argparse.ArgumentParser()
-    parser.add_argument('--level', help = 'Triagle level to build', type=int)
+    parser.add_argument('--level', help = 'Triagle level to build use as "--level 5"', type=int)
     args = parser.parse_args()
     level = args.level
     print(level)
