@@ -3,7 +3,7 @@ class NumerosAmigos:
         self.numerosAmigos = {}
 
     def getNumerosAmigos(self, topNumerosAmigos):
-        numerosAmigos = []
+        numerosAmigosA = []
         self.numerosAmigos.update({1:1})
         self.numerosAmigos.update({2:1})
         for i in range(3, topNumerosAmigos + 1):
@@ -17,8 +17,8 @@ class NumerosAmigos:
                 probablyFriend = self.numerosAmigos[i]
                 if probablyFriend in self.numerosAmigos:
                     if self.numerosAmigos[probablyFriend] == i:
-                        numerosAmigos.append((i, probablyFriend))
-        return numerosAmigos
+                        numerosAmigosA.append((i, probablyFriend))
+        return numerosAmigosA
 
 
     def getDivisors(self, number):
@@ -45,6 +45,8 @@ class NumerosAmigos:
 
 
 if __name__ == "__main__":
+
     na = NumerosAmigos()
-    topNumber = 1000000
+    topNumber = 285
     print(na.getNumerosAmigos(topNumber))
+    import pdb; pdb.set_trace()
