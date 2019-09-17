@@ -91,7 +91,11 @@ def minimumSwaps(arr):
     pass
 
 def rightSearch(arr, leftIndex):
-
+    comparableNumber = arr[leftIndex]
+    headIndex = leftIndex + 1
+    while headIndex < len( arr ):
+        if comparableNumber > arr[rIndex]:
+            pass
 
 def leftSearch(arr, index):
     pValue    = arr[index]
