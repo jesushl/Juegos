@@ -27,15 +27,15 @@ class Googlon:
         self.verb_subjuntive_code           = 3
         #Minimum word len to be classified
         self.classification_len_condition   = 6
-        self.pretty_number_len_condition    = 4
+        self.pretty_number_len_condition    = 3
         self.pretty_number_min_value        = 81827
         #preposition char requirement
         self.preposition_char_requirement   = 'u'
 
         self.statistics_collection          = {'prepositions': 0,'verbs': 0}
         self.statistics_collection.update({'subjuntive_verbs' : 0})
-        self.statistics_collection.update({'prety_numbers': 0})
-
+        self.statistics_collection.update({'pretty_numbers': 0})
+        self.words_dictionary = {}
     #StartPoint
     def getGooglonAnalysis(self, string_message):
         string_message = string_message.lower()
@@ -44,48 +44,49 @@ class Googlon:
         return self.statistics_collection
 
     def build_words_integration(self, words_in_message):
-        words_dictionary = {}
         numbers_set   = set()
 
         for word in words_in_message:
-            if word not in words_dictionary:
+            if word not in self.words_dictionary:
                 word_classification = self.word_classification(word)
-                words_dictionary.update({word : word_classification})
-            word_classification = words_dictionary[word]['word_classification_code']
-            if word_classification is self.other_classification:
-                numbers_set.add(word)
+                self.words_dictionary.update({word : word_classification})
+            word_classification = self.words_dictionary[word]['word_classification_code']
             if word_classification is self.verb_code:
                 self.update_statistics('verbs')
             if word_classification is self.verb_subjuntive_code:
                 self.update_statistics('subjuntive_verbs')
+                self.update_statistics('verbs')
             if word_classification is self.presposition_code:
                 self.update_statistics('prepositions')
+        self.statistics_collection['pretty_numbers'] = self.get_pretty_numbers(words_in_message)
+        return self.words_dictionary
 
-        self.statistics_collection['pretty_numbers'] = self.get_pretty_numbers(numbers_set)
-
-
-    def get_pretty_numbers(self, numbers_set):
+    #This method use words in a message and get all
+    # words that value in base twenty is  > 81827
+    # and % 3 is zero
+    def get_pretty_numbers(self, words_in_message):
         pretty_numbers = 0
-        for number in numbers_set:
-            if len(number) > self.pretty_number_len_condition:
-                base_ten_number = self.get_base_two_from_base_ten(number)
-                print(base_ten_number)
+        for word in words_in_message:
+            if len(word) > self.pretty_number_len_condition:
+                base_ten_number = self.get_base_ten_from_base_twenty(word)
                 if base_ten_number > self.pretty_number_min_value:
                     if (base_ten_number % 3) == 0:
                         pretty_numbers =  pretty_numbers + 1
         return pretty_numbers
 
-    def get_base_two_from_base_ten(self, word_base_twenty):
+    # Transfors a word to a number using alphabeth values
+    # and base 20
+    def get_base_ten_from_base_twenty(self, word_base_twenty, base = 20):
         power = 1
         word_len = len(word_base_twenty) -1
         base_ten = 0
-        for index in range(word_len,-1,-1):
+        for index in range(word_len,-1,-1): # range iterates in reverse
             if word_base_twenty[index] in self.alphabet:
                 char_value = self.alphabet[word_base_twenty[index]]
-                base_ten = base_ten + (pow(20,power) * char_value)
-                power = power + 1
+                base_ten = base_ten + (pow(base, power) * char_value)
+                power = power + 1 #power value change by iteration
             else:
-                print('char {0} in word {1} out of alphabeth'.format(word_base_twenty[index], word))
+                #print('char {0} in word {1} out of alphabeth'.format(word_base_twenty[index], word))
                 return 0
         return base_ten
 
@@ -115,9 +116,9 @@ class Googlon:
     def is_subjuntive(self, word):
         return not self.is_char_in_word_index_foo(word, 0)
 
-    def is_preposition(self, word):
+    def is_preposition(self, word, len_word = 6):
         is_preposition =  False
-        if len(word) == 6:
+        if len(word) == len_word:
             word_chars =  set(word)
             if not self.preposition_char_requirement in word_chars:
                 is_preposition = True
@@ -128,8 +129,57 @@ class Googlon:
             return True
         return False
 
+    #Use an alphabeth buble sort
+    def get_alphabetical_order(self):
+        words = list(self.words_dictionary.keys())
+        ordered_words = []
+        ordered_words.append(words.pop())
+        for word in words:
+            inserted = False
+            for i in range(0,len(ordered_words)):
+                is_left = self.is_left(word, ordered_words[i])
+                if self.is_left(word, ordered_words[i]):
+                    ordered_words.insert(i, word)
+                    inserted = True
+                    break
+            if not inserted:
+                ordered_words.append(word)
+            #import pdb; pdb.set_trace()
+        return ordered_words
+
+
+    def is_left(self, word_to, word_in):
+        len_word_to = len(word_to)
+        len_word_in = len(word_in)
+        comparation_len = 0
+        is_to_bigger = False
+        if len_word_to > len_word_in:
+            comparation_len = len_word_in
+            is_to_bigger = True
+        else:
+            comparation_len = len_word_to
+        for i in range(0, comparation_len):
+            if  self.alphabet[word_to[i]] < self.alphabet[word_in[i]]:
+                return True
+            elif self.alphabet[word_to[i]] > self.alphabet[word_in[i]]:
+                return False
+        if is_to_bigger:
+            return False
+        else:
+            return True
+
+    def print_result(self, message):
+        self.getGooglonAnalysis(message)
+        print("1) There are {} prepositions in the text".format(self.statistics_collection['prepositions']))
+        print("2) There are {} verbs in the text".format(self.statistics_collection['verbs']))
+        print("3) There are {} subjunctive verbs in the text".format(self.statistics_collection['subjuntive_verbs']))
+        ordered_words = self.get_alphabetical_order()
+        print("4) Vocabulary list: {}".format(' '.join(ordered_words)))
+
+        print("5) There are {} distinct pretty numbers in the text".format(self.statistics_collection['pretty_numbers']))
+
+
 if __name__ == '__main__':
     gglon = Googlon()
-    message = 'Un mensaje sencillo aaaaaf ansaje xssss'
-    #print(gglon.getGooglonAnalysis(message))
-    print(gglon.get_base_two_from_base_ten('xssss'))
+    message = "shoce pq podciy nfwh phfer epgdc dgsloqe do rhfl qhmoixw cmfur qdrulxogji whc ermjdhsx py en yco ienqm wjuln dwuch qinhmjul mjxdqfrnlg iygsex qihmu grewyluhfs ucf us xclpedqmi yrx qinexwo qx rqw wxflpdn rsogxd cpqmxj lgchqdin fdw nwcrus coj nj qplfjnwidg fwdmslqn cwj hysucxdqm ms hdmwpe igxweo sqflo ycqlinro ghu hgecdfj mw xrpmyenq fgixsr fpwcnguieh fclgj ghepqyd jxhwe cejfugn ujxqh ihncrl mlceo udr fm ocxfsjdng sfoqmd pdoymnwxei spqinedf ql ncsepfl icmqsdj chwjlg yiq ifl syejrqd lwnepmcg xlmnfqry ghlyopuncw qx iw sionpux cop dmqpchuyf ojxfqhernm ignpeyf rseoyl emjocsild rfimdy mwd oewgjfr uo irmcunfgx ylduwpsnh xrdng gcxr ng prfmjicud srdueqhgiy nmodwsqijh dcnql"
+    gglon.print_result(message)
