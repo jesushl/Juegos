@@ -1,0 +1,97 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+# Here  a insertion sort is better
+# Complete the activityNotifications function below.
+def activityNotifications(
+    expediture:list,
+    d:int
+)->int:
+    return collect_expediture_averages_and_limits(
+        expediture=expediture,
+        d=d
+    )
+
+def collect_expediture_averages_and_limits(
+  expediture:list,
+  d:int  
+)->dict:
+    notifications  = 0
+    averages = []
+    average_index = tuple()
+    # first_ordered_list
+    lo = 0
+    hi = d 
+    sorted_list = sorted(expediture[lo:hi])
+    if d%2 != 0 :
+        average_index = (int(d/2))
+    else:
+        average_index = (int(d/2), int(d/2) + 1)
+    last_charge = expediture[hi]
+    averages.append({last_charge: sorted_list })
+    print(averages)
+    while lo < len(expediture) - d -1:
+        #remove a value from list
+        sorted_list= sorted_list[:]
+        sorted_list.remove(expediture[lo])
+        lo = lo + 1
+        
+        sorted_list.append(last_charge)
+        sorted_list = sorted(sorted_list)
+        hi = hi + 1
+        try:
+            averages.append({expediture[hi]: sorted_list})
+        except IndexError:
+            continue
+    # At this point this dictionary contains a 
+    # last spend and a list of previous values sorted
+    # now I will get averages and notifications 
+    print(averages)
+    for sorted_values in averages:
+        for last_charge in sorted_values:
+            average = get_average_value(
+                sorted_values[last_charge],
+                average_index
+            )
+            if  last_charge >= (average * 2):
+                notifications = notifications + 1
+        
+    return notifications
+                
+def get_average_value(
+    expediture:list,
+    average_index:tuple,
+)->int:
+    average = 0
+    if isinstance(average_index, tuple):
+        for index in average_index:
+            average = average + expediture[index]
+            average = average / 2
+    else:
+        average = expediture[average_index]
+    return average    
+        
+        
+        
+
+    
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    nd = input().split()
+
+    n = int(nd[0])
+
+    d = int(nd[1])
+
+    expenditure = list(map(int, input().rstrip().split()))
+
+    result = activityNotifications(expenditure, d)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
