@@ -16,11 +16,12 @@ def activityNotifications(
         d=d
     )
 
+
 def collect_expediture_averages_and_limits(
-  expediture:list,
-  d:int  
-)->dict:
-    notifications  = 0
+  expediture: list,
+  d: int
+) -> dict:
+    notifications = 0
     averages = []
     average_index = tuple()
     # first_ordered_list
