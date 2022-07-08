@@ -9,6 +9,7 @@ The game is this:
     10 = 1010
     5 =0101
 """
+
 def run_to_right(value: str):
     int_value = int(value, 2)
     steps = 0
